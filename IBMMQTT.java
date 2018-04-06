@@ -6,9 +6,9 @@ import com.ociweb.pronghorn.network.TLSCertificates;
 public class IBMMQTT implements GreenApp
 {
     MQTTBridge mqttBridge;
-    String host="gysmrx.messaging.internetofthings.ibmcloud.com";
+    String host="<orgid>.messaging.internetofthings.ibmcloud.com"; //orgid is the organization ID of your IBM IoT console
     int port=8883;
-    String CliendID="d:gysmrx:pi:mqttdevice";
+    String CliendID="d:<orgid>:<devicetype>:<devicename>"; //tip: this is easy to find if we create a dashboard for devices(device info)
     String topic="iot-2/evt/status/fmt/json";
 
     @Override
@@ -17,25 +17,25 @@ public class IBMMQTT implements GreenApp
        // builder.useInsecureNetClient();
         mqttBridge=builder.useMQTT(host,port,CliendID)
                .cleanSession(true)
-                .authentication("use-token-auth", "nopassword", new TLSCertificates() {
+                .authentication("<username>", "<password>", new TLSCertificates() { //username is "use-token-auth" and password is the token created for device
                     @Override
                     public String keyStoreResourceName() {
-                        return "/certificate/IBMCertandKey.p12";
+                        return "/certificate/<your cert name>"; // .jks/.p12 files are supported. Certs are needed to be put in the resources/certificate folder
                     }
 
                     @Override
                     public String trustStroreResourceName() {
-                        return "/certificate/IBMtruststore.jks";
+                        return "/certificate/<your truststore name>"; //.jks files are supported. Certs are needed to be put in the resources/certificate folder
                     }
 
                     @Override
                     public String keyStorePassword() {
-                        return "nopassword";
+                        return "<your keystore password>";
                     }
 
                     @Override
                     public String keyPassword() {
-                        return "nopassword";
+                        return "<your truststore password>";
                     }
 
                     @Override
